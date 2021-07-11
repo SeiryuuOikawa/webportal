@@ -19,7 +19,8 @@
 	href="../static/img/favicon.ico">
 <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
-<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
 <!-- スタイル設定 -->
 <link rel="stylesheet"
@@ -30,10 +31,12 @@
 	href="../static/css/ress.css">
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
+<script th:src="@{/js/task.js}"></script>
+
 </head>
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
 	<!-- 共通ヘッダ -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
 		<h1>
 			<a class="navbar-brand title-font" th:href="@{/}">WebPortal.com</a>
 		</h1>
@@ -57,23 +60,42 @@
 		</div>
 	</nav>
 	<!-- コンテンツ -->
-	<div class="container">
-		<div class="content-box">
-			<h1>住所検索画面</h1>
-			<h2>郵便番号</h2>
-			<h3>検索結果</h3>
-			<!-- 基本1件だが、API構造に従い繰り返し構文とする -->
-			<ul th:each="result : ${zipCodeEntity.results}" th:object="${result}">
-				<li><span th:text="*{zipcode}"></span></li>
-				<li><span th:text="*{address1}"></span></li>
-				<li><span th:text="*{address2}"></span></li>
-				<li><span th:text="*{address3}"></span></li>
-				<li><span th:text="*{kana1}"></span></li>
-				<li><span th:text="*{kana2}"></span></li>
-				<li><span th:text="*{kana3}"></span></li>
-			</ul>
-		</div>
+	<h2>ユーザ管理</h2>
+
+
+
+	<hr>
+
+	
+	<div class="content-box">
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">ユーザID(メールアドレス)</th>
+				<th scope="col">アカウント有効性</th>
+				<th scope="col">ユーザ名</th>
+				<th scope="col">ダークモード</th>
+				<th scope="col">権限</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${userEntity.userlist}">
+				<td scope="row"><span th:text="${user.user_id}"></span></td>
+				<td scope="row"><span th:text="${user.enabled}"></span></td>
+				<td scope="row"><span th:text="${user.user_name}"></span></td>
+				<td scope="row"><span th:text="${user.darkmode}"></span></td>
+				<td scope="row"><span th:text="${user.role}"></span></td>
+				<td scope="row"><a class="btn btn-success" th:href="@{'/user/detail/' + ${user.user_id}}">詳細</a></td>
+			</tr>
+		</tbody>
+	</table>
+	
+		<form class="my-2 my-lg-0" method="get" th:action="@{/user/insert}">
+		<button type="submit" class="btn btn-warning">追加</button>
+		</form>
 	</div>
+
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -86,5 +108,6 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+
 </body>
 </html>

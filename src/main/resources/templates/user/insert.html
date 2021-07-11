@@ -19,7 +19,8 @@
 	href="../static/img/favicon.ico">
 <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
-<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
 <!-- スタイル設定 -->
 <link rel="stylesheet"
@@ -30,10 +31,12 @@
 	href="../static/css/ress.css">
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
+<script th:src="@{/js/task.js}"></script>
+
 </head>
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
 	<!-- 共通ヘッダ -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-info">
 		<h1>
 			<a class="navbar-brand title-font" th:href="@{/}">WebPortal.com</a>
 		</h1>
@@ -59,21 +62,60 @@
 	<!-- コンテンツ -->
 	<div class="container">
 		<div class="content-box">
-			<h1>住所検索画面</h1>
-			<h2>郵便番号</h2>
-			<h3>検索結果</h3>
-			<!-- 基本1件だが、API構造に従い繰り返し構文とする -->
-			<ul th:each="result : ${zipCodeEntity.results}" th:object="${result}">
-				<li><span th:text="*{zipcode}"></span></li>
-				<li><span th:text="*{address1}"></span></li>
-				<li><span th:text="*{address2}"></span></li>
-				<li><span th:text="*{address3}"></span></li>
-				<li><span th:text="*{kana1}"></span></li>
-				<li><span th:text="*{kana2}"></span></li>
-				<li><span th:text="*{kana3}"></span></li>
-			</ul>
+			<h2>ユーザ登録</h2>
+			<p>（管理者用）</p>
+
+			<div class="input-form">
+				<form method="post" th:action="@{/user/insert}"
+					th:object="${userForm}">
+
+					<label for="user_id">ユーザID(メールアドレス)</label>
+					<div class="form-group input-box"
+						th:classappend="${#fields.hasErrors('user_id')} ? 'has-error'">
+						<input type="text" class="form-control" name="user_id"
+							placeholder="xxxxxxx@xxx.xxx" th:field="*{user_id}"> <span
+							class="text-danger" th:if="${#fields.hasErrors('user_id')}"
+							th:errors="*{user_id}">user_id error</span>
+					</div>
+
+					<label for="password">パスワード</label>
+					<div class="form-group input-box"
+						th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+						<input type="password" class="form-control" name="password"
+							placeholder="xxxxxxxx" th:field="*{password}"> <span
+							class="text-danger" th:if="${#fields.hasErrors('password')}"
+							th:errors="*{password}">password error</span>
+					</div>
+
+					<label for="user_name">ユーザ名</label>
+					<div class="form-group input-box"
+						th:classappend="${#fields.hasErrors('user_name')} ? 'has-error'">
+						<input type="text" class="form-control" name="user_name"
+							placeholder="情報 太郎" th:field="*{user_name}"> <span
+							class="text-danger" th:if="${#fields.hasErrors('user_name')}"
+							th:errors="*{user_name}">user_name error</span>
+					</div>
+
+					<label for="role">権限設定</label>
+					<div class="form-group input-box">
+						<div>
+							<input type="radio" name="role" value="ROLE_ADMIN" id="role1">管理
+						</div>
+						<div>
+							<input type="radio" name="role" value="ROLE_GENERAL" id="role2">一般
+						</div>
+						<span class="text-danger" th:if="${#fields.hasErrors('role')}"
+							th:errors="*{role}">role error</span>
+					</div>
+
+					<button type="submit" class="btn btn-warning">登録</button>
+				</form>
+			</div>
 		</div>
 	</div>
+
+
+
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -86,5 +128,6 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+
 </body>
 </html>

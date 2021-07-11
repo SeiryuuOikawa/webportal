@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+
 <meta charset="UTF-8">
 <title>WebPortal Main</title>
+
 <!-- モバイル設定 -->
 <meta id="viewport" name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -14,6 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="WebPortal">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <!-- アイコン設定 -->
 <link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
 	href="../static/img/favicon.ico">
@@ -21,6 +24,7 @@
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="192x192">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
 <!-- スタイル設定 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -30,10 +34,13 @@
 	href="../static/css/ress.css">
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
+
 </head>
+
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
+
 	<!-- 共通ヘッダ -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark btn btn-primary">
 		<h1>
 			<a class="navbar-brand title-font" th:href="@{/}">WebPortal.com</a>
 		</h1>
@@ -56,24 +63,26 @@
 			</ul>
 		</div>
 	</nav>
+
 	<!-- コンテンツ -->
 	<div class="container">
 		<div class="content-box">
-			<h1>住所検索画面</h1>
-			<h2>郵便番号</h2>
-			<h3>検索結果</h3>
-			<!-- 基本1件だが、API構造に従い繰り返し構文とする -->
-			<ul th:each="result : ${zipCodeEntity.results}" th:object="${result}">
-				<li><span th:text="*{zipcode}"></span></li>
-				<li><span th:text="*{address1}"></span></li>
-				<li><span th:text="*{address2}"></span></li>
-				<li><span th:text="*{address3}"></span></li>
-				<li><span th:text="*{kana1}"></span></li>
-				<li><span th:text="*{kana2}"></span></li>
-				<li><span th:text="*{kana3}"></span></li>
+			<h1><span th:text="${weatherEntity.title}"></span></h1>
+			<h3>詳細</h3>
+			<!-- 基本一件だが、API構造に従い繰り返す構文とする -->
+			<ul th:each="forecast : ${weatherEntity.forecasts}" th:object="${forecast}">
+				<li><span th:text="*{dateLabel}"></span></li>
+				<li><span th:text="*{telop}"></span></li>
+				<li><span th:text="*{description}"></span></li>
+			</ul>
+			<ul th:each="description_one : ${weatherEntity.description}" th:object="${description_one}">
+				<li><span th:text="*{headlineText}"></span></li>
+				<li><span th:text="*{bodyText}"></span></li>
+				<li><span th:text="*{text}"></span></li>
 			</ul>
 		</div>
 	</div>
+
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

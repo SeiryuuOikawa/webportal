@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+
 <meta charset="UTF-8">
 <title>WebPortal Main</title>
+
 <!-- モバイル設定 -->
 <meta id="viewport" name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -14,13 +16,16 @@
 <meta name="apple-mobile-web-app-title" content="WebPortal">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <!-- アイコン設定 -->
 <link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
 	href="../static/img/favicon.ico">
 <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
-<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
 <!-- スタイル設定 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -30,10 +35,13 @@
 	href="../static/css/ress.css">
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
+<script th:src="@{/js/detail.js}"></script>
 </head>
+
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
+
 	<!-- 共通ヘッダ -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
 		<h1>
 			<a class="navbar-brand title-font" th:href="@{/}">WebPortal.com</a>
 		</h1>
@@ -56,24 +64,62 @@
 			</ul>
 		</div>
 	</nav>
+
 	<!-- コンテンツ -->
 	<div class="container">
 		<div class="content-box">
-			<h1>住所検索画面</h1>
-			<h2>郵便番号</h2>
-			<h3>検索結果</h3>
-			<!-- 基本1件だが、API構造に従い繰り返し構文とする -->
-			<ul th:each="result : ${zipCodeEntity.results}" th:object="${result}">
-				<li><span th:text="*{zipcode}"></span></li>
-				<li><span th:text="*{address1}"></span></li>
-				<li><span th:text="*{address2}"></span></li>
-				<li><span th:text="*{address3}"></span></li>
-				<li><span th:text="*{kana1}"></span></li>
-				<li><span th:text="*{kana2}"></span></li>
-				<li><span th:text="*{kana3}"></span></li>
-			</ul>
+			<h2>ユーザ詳細</h2>
+			<div class="input-form">
+				<form method="post" th:action="@{/user/update}"
+					th:object="${userData}">
+
+					<label for="user_id">ユーザID(メールアドレス)</label>
+					<p class="view-mail" th:text="*{user_id}"></p>
+					<input type="hidden" name="user_id" th:value="*{user_id}">
+
+					<hr>
+
+					<label for="password">パスワード</label>
+					<div class="form-group input-box"
+						th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+						<input type="password" class="form-control" name="password"
+							placeholder="xxxxxxxx" th:field="*{password}"> <span
+							class="text-danger" th:if="${#fields.hasErrors('password')}"
+							th:errors="*{password}">password error</span>
+						<p>※未入力の場合、前のパスワードを維持します</p>
+					</div>
+
+					<label for="user_name">ユーザ名</label>
+					<div class="form-group input-box"
+						th:classappend="${#fields.hasErrors('user_name')} ? 'has-error'">
+						<input type="text" class="form-control" name="user_name"
+							placeholder="情報 太郎" th:field="*{user_name}"> <span
+							class="text-danger" th:if="${#fields.hasErrors('user_name')}"
+							th:errors="*{user_name}">user_name error</span>
+					</div>
+
+					<label for="role">権限設定</label>
+					<div class="form-group input-box">
+						<div>
+							<input type="radio" name="role" th:field="*{role}" value="ROLE_ADMIN" id="role1">管理
+						</div>
+						<div>
+							<input type="radio" name="role" th:field="*{role}" value="ROLE_GENERAL" id="role2">一般
+						</div>
+						<span class="text-danger" th:if="${#fields.hasErrors('role')}"
+							th:errors="*{role}">role error</span>
+					</div>
+					<button class="btn btn-primary" type="submit" name="update" onclick="return check()">更新</button>
+				</form>
+					<hr>
+				<form method="post" th:action="@{/user/delete}" th:object="${userData}">
+					<input type="hidden" th:value="*{user_id}" name="user_id">
+					<button class="btn btn-danger" type="submit" name="delete">削除</button>
+				</form>
+			</div>
 		</div>
 	</div>
+
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

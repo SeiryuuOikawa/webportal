@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+
 <meta charset="UTF-8">
 <title>WebPortal Main</title>
+
 <!-- モバイル設定 -->
 <meta id="viewport" name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -14,6 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="WebPortal">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <!-- アイコン設定 -->
 <link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
 	href="../static/img/favicon.ico">
@@ -21,6 +24,7 @@
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="192x192">
 <link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
 <!-- スタイル設定 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -30,10 +34,14 @@
 	href="../static/css/ress.css">
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
+	<script th:src="@{/js/task.js}"></script>
+
 </head>
+
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
+
 	<!-- 共通ヘッダ -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark btn btn-primary">
 		<h1>
 			<a class="navbar-brand title-font" th:href="@{/}">WebPortal.com</a>
 		</h1>
@@ -56,24 +64,52 @@
 			</ul>
 		</div>
 	</nav>
+
 	<!-- コンテンツ -->
-	<div class="container">
-		<div class="content-box">
-			<h1>住所検索画面</h1>
-			<h2>郵便番号</h2>
-			<h3>検索結果</h3>
-			<!-- 基本1件だが、API構造に従い繰り返し構文とする -->
-			<ul th:each="result : ${zipCodeEntity.results}" th:object="${result}">
-				<li><span th:text="*{zipcode}"></span></li>
-				<li><span th:text="*{address1}"></span></li>
-				<li><span th:text="*{address2}"></span></li>
-				<li><span th:text="*{address3}"></span></li>
-				<li><span th:text="*{kana1}"></span></li>
-				<li><span th:text="*{kana2}"></span></li>
-				<li><span th:text="*{kana3}"></span></li>
-			</ul>
+	<h2>タスク管理</h2>
+	
+	<hr>
+	
+	<form method="post" th:action="@{/task/insert}">
+		<div class="input-group">
+			<input type="text" class="form-control" name="comment" placeholder="タスク内容">
+			<input type="date" class="form-control" name="limitday">
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-warning">追加</button>
+			</span>
 		</div>
-	</div>
+	</form>
+	
+	<hr>
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">内容</th>
+				<th scope="col">期限</th>
+			</tr>
+		</thead>
+		<tbody th:each="task : ${taskEntity.tasklist}">
+			<tr>
+				<td>
+					<a th:href="@{'/task/delete/' + ${task.id}}" onclick="return delete_verification()">
+					<span th:text="${task.comment}"></span></a>
+				</td>
+				<td>
+					<span th:text ="${task.limitday}"></span>
+				</td>
+			</tr>
+		
+		</tbody>
+	
+	</table>
+	
+	<hr>
+	
+	<form method="post" th:action="@{/task/csv}">
+		<button type="submit" class="btn btn-info">CSV出力</button>
+	</form>
+	
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

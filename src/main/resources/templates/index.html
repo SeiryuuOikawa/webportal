@@ -35,6 +35,19 @@
 <link rel="stylesheet" th:href="@{/css/home.css}"
 	href="../static/css/home.css">
 
+<script type="text/javascript">
+            function check(){
+                if (zipcode.value.equals("")){
+                    //郵便番号が未入力
+                    alert("郵便番号を入力してください");   //エラーメッセージを出力
+                    return false;
+                }else{
+                    //郵便番号が入力された場合
+                    return true;
+                }
+            }
+        </script>
+
 </head>
 
 <body th:classappend="${session.isDarkmode} ? 'mode-dark'">
@@ -76,15 +89,77 @@
 							<input type="number" class="form-control" name="zipcode"
 								placeholder="郵便番号 : XXXXXXX"> <span
 								class="input-group-btn">
-								<button type="submit" class="btn btn-primary">検索</button>
+								<button type="submit" class="btn btn-primary" onClick="return check()">検索</button>
 							</span>
 						</div>
 					</form>
 				</div>
 			</div>
-
-		</div>
+			
+			<div class="col-sm-6">
+				<div class="content-box">
+					<h2>天気予報</h2>
+					<form method="post" th:action="@{/weather}" name="weather">
+						<select name="weather"class="form-control">
+						<option value="" selected>選んでください</option>
+						<option value="011000" id="11000">稚内</option>
+						<option value="012010" id="12010">旭川</option>
+						<option value="012020" id="12020">留萌</option>
+						<option value="013010" id="13010">網走</option>
+						<option value="013020" id="13020">北見</option>
+						<option value="013030" id="13030">紋別</option>
+						<option value="014010" id="14010">根室</option>
+						<option value="014020" id="14020">釧路</option>
+						<option value="014030" id="14030">帯広</option>
+						<option value="015010" id="15010">室蘭</option>
+						<option value="015020" id="15020">浦河</option>
+						<option value="017010" id="17010">函館</option>
+						<option value="017020" id="17020">江差</option>
+						<option value="016010" id="16010">札幌</option>
+						<option value="016020" id="16020">岩見沢</option>
+						<option value="016030" id="16030">俱知安</option>
+						</select>
+								<button type="submit" class="btn btn-primary"onclick="weather_check()" >
+								詳細</button>
+					</form>
+				</div>
+			</div>
+			
+			<div class="col-sm-6">
+				<div class="content-box">
+					<h2>直近のタスク</h2>
+					<form method="post" th:action="@{/task}">
+							<button type="submit" class="btn btn-primary" >タスク管理へ</button>
+					</form>
+				</div>
+			</div>
+			
+			<div class="col-sm-6">
+				<div class="content-box">
+					<h2>飲食店検索 - 北海道</h2>
+					<form method="post" th:action="@{/gourmet}">
+						<div class="input-group">
+							<input type="text" class="form-control" name="shopname"
+								placeholder="キーワード入力"> <span
+								class="input-group-btn">
+								<button type="submit" class="btn btn-primary" >検索</button>
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="col-sm-6" role="presentation" sec:authoriz="hasRole('ADMIN')">
+				<!-- 管理者のみのコンテンツ -->
+				<div class="content-box">
+					<h2>ユーザ管理</h2>
+					<form method="get" th:action="@{/user/list}">
+						<button type="submit" class="btn btn-primary">ユーザ管理へ</button>
+					</form>
+				</div>
+			</div>
 	</div>
+</div>
 
 	<!-- 共通スクリプト -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
